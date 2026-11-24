@@ -51,7 +51,7 @@ Les cours viennent de Yahoo Finance (ou d'EODHD sous licence, `PA_SOURCE_PRIX=eo
 ## Vitesse, mesurée honnêtement
 
 `vitesse/` : mêmes stratégies dans ce moteur, vectorbt et NautilusTrader. Sur 5 000 séances, ce moteur met 0,06 s (10 lignes) à 0,11 s (50 lignes), vectorbt 0,03 à 0,08 s (code compilé, 13 s de compilation au premier appel) ;
-les trois donnent les mêmes positions, et ce moteur la même valeur que vectorbt au millionième près.
+les trois donnent les mêmes positions, et ce moteur la même valeur finale que vectorbt à 0,01 % près.
 
 ## Registres ancrés
 
