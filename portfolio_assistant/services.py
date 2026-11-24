@@ -390,6 +390,14 @@ def _atelier_log_many(ws: Workspace, entries: list[tuple[dict, dict]]) -> int:
     return len(seen)
 
 
+def grid_estimate(ws: Workspace, universe: str, settings: dict, n: int) -> float:
+    from . import algo, grille
+    from . import execution as ex
+    base = algo.AlgoSpec(costs=ex.COST_PRESETS[settings.get("frais", next(iter(ex.COST_PRESETS)))],
+                         **{k: v for k, v in settings.items() if k not in ("frais", "en séance")})
+    return grille.estimate_seconds(ws.lab(universe, None).is_prices, base, n)
+
+
 def grid_run(ws: Workspace, universe: str, settings: dict, grid: dict[str, list],
              instruments: list[dict] | None = None, progress=None) -> dict:
     """A grid of the algorithmic mode on the construction period; every combination is

@@ -173,6 +173,30 @@ def cmd_essais(a) -> dict:
     return out
 
 
+def cmd_ancrer(a) -> dict:
+    from . import ancrage
+    ws = _ws(a.projet)
+    entry = ancrage.anchor(ws.lab_dir, a.chaine)
+    out = {"nouvel ancrage": entry is not None, "vérification": ancrage.verify(ws.lab_dir, a.chaine)}
+    if not a.json:
+        print(("Ancrage n° %d ajouté" % entry["n"]) if entry else "Rien de nouveau depuis le dernier ancrage.")
+        v = out["vérification"]
+        print(f"Vérification : {'conforme' if v['ok'] else 'PROBLÈME'} ({v['ancrages']} ancrages)")
+        for p in v["problèmes"]:
+            print("  -", p)
+    return out
+
+
+def cmd_verifier(a) -> dict:
+    from . import ancrage
+    v = ancrage.verify(_ws(a.projet).lab_dir, a.chaine)
+    if not a.json:
+        print(f"{'Conforme' if v['ok'] else 'PROBLÈME'} : {v['ancrages']} ancrages, dernier le {v['dernier']}")
+        for p in v["problèmes"]:
+            print("  -", p)
+    return v
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="portfolio-assistant", description="Atelier et laboratoire en ligne de commande")
     p.add_argument("--projet", default=".", help="dossier du logiciel (par défaut : le dossier courant)")
@@ -206,6 +230,10 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--profil", default=None)
     s.add_argument("--paniers", type=int, default=40)
     sub.add_parser("essais", help="nombre d'essais comptés par univers")
+    for name, helptext in (("ancrer", "ajouter un ancrage des registres à la chaîne"),
+                           ("verifier", "vérifier les registres contre la chaîne d'ancrages")):
+        s = sub.add_parser(name, help=helptext)
+        s.add_argument("--chaine", default="laboratoire/ancrages.jsonl")
     a = p.parse_args(argv)
     out = globals()[f"cmd_{a.commande}"](a)
     if a.json:

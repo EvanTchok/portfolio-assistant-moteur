@@ -25,6 +25,15 @@ from .analytics import sharpe_statistics
 from .metrics import summary
 
 MAX_COMBINATIONS = 2000
+MAX_EN_LIGNE = 500                 # a shared server: smaller grids, one core by default (PA_GRILLE_COEURS)
+
+
+def online() -> bool:
+    return os.environ.get("PA_EN_LIGNE", "").strip().lower() in ("1", "oui", "true", "yes")
+
+
+def limit() -> int:
+    return MAX_EN_LIGNE if online() else MAX_COMBINATIONS
 SPLIT = 0.7
 GRID_PARAMS = {
     "fast": "Fenêtre principale (séances)", "slow": "Fenêtre de sortie ou longue (séances)",
@@ -67,8 +76,9 @@ def combinations(base: algo.AlgoSpec, grid: dict[str, list]) -> list[tuple[dict,
         raise ValueError(f"paramètres de grille inconnus : {unknown}")
     sizes = [len(grid[k]) for k in keys]
     total = int(np.prod(sizes)) if sizes else 1
-    if total > MAX_COMBINATIONS:
-        raise ValueError(f"{total} combinaisons : la grille est limitée à {MAX_COMBINATIONS}")
+    if total > limit():
+        raise ValueError(f"{total} combinaisons : la grille est limitée à {limit()}"
+                         + (" en ligne" if online() else ""))
     out = []
     for values in itertools.product(*[grid[k] for k in keys]):
         params = dict(zip(keys, values))
@@ -79,13 +89,25 @@ def combinations(base: algo.AlgoSpec, grid: dict[str, list]) -> list[tuple[dict,
     return out
 
 
+def estimate_seconds(prices: pd.DataFrame, base: algo.AlgoSpec, n: int, workers: int | None = None) -> float:
+    """Times one run, scales it: shown before a grid is launched."""
+    import time
+    start = time.perf_counter()
+    algo.run_algo(prices, base)
+    one = time.perf_counter() - start
+    cores = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
+    w = workers or (1 if online() else min(cores, 8))
+    return one * n / max(1, min(w, n)) * 1.1
+
+
 def run_grid(prices: pd.DataFrame, base: algo.AlgoSpec, grid: dict[str, list], instruments: dict | None = None,
              *, workers: int | None = None, progress=None) -> dict:
     combos = combinations(base, grid)
     if not combos:
         raise ValueError("aucune combinaison possible avec ces réglages")
     cores = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
-    workers = max(1, min(workers or int(os.environ.get("PA_GRILLE_COEURS", cores)), len(combos), 8))
+    default = 1 if online() else cores
+    workers = max(1, min(workers or int(os.environ.get("PA_GRILLE_COEURS", default)), len(combos), 8))
     jobs = [(i, spec) for i, (_, spec) in enumerate(combos)]
     rows = []
     if workers == 1:

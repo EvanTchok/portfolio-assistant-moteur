@@ -1,5 +1,7 @@
 # Portfolio Assistant — moteur
 
+[![tests](https://github.com/EvanTchok/portfolio-assistant-moteur/actions/workflows/tests.yml/badge.svg)](https://github.com/EvanTchok/portfolio-assistant-moteur/actions/workflows/tests.yml)
+
 *English below.*
 
 Le moteur de recherche de [Portfolio Assistant](https://portfolio-assistant-foqd.onrender.com) : un laboratoire de
@@ -51,10 +53,18 @@ Les cours viennent de Yahoo Finance (ou d'EODHD sous licence, `PA_SOURCE_PRIX=eo
 `vitesse/` : mêmes stratégies dans ce moteur, vectorbt et NautilusTrader. vectorbt est plus rapide (code compilé) ;
 les trois donnent les mêmes positions, et ce moteur la même valeur que vectorbt au millionième près.
 
+## Registres ancrés
+
+`registre/ancrages.jsonl` publie, à chaque ancrage, le nombre de lignes et l'empreinte SHA-256 de chaque registre du
+laboratoire en ligne (essais, gels, tests, suivi, atelier), chaque ancrage portant l'empreinte du précédent. Les
+registres eux-mêmes ne sont pas publiés, seulement leurs empreintes. L'historique de ce dépôt date chaque ancrage :
+quiconque reçoit plus tard les registres vérifie avec `portfolio-assistant verifier --chaine registre/ancrages.jsonl`
+qu'aucun essai n'a été retiré, aucun test redaté, aucun gel modifié depuis.
+
 ## Ce qui n'est pas ici
 
 Le logiciel du conseiller (comptes, clients, profil MiFID, documents, fiscalité, paiement) reste dans la version
-en ligne. Aucune donnée personnelle ni aucun registre de recherche n'est publié.
+en ligne. Aucune donnée personnelle n'est publiée, et des registres de recherche seulement les empreintes.
 
 Portfolio Assistant est une aide à la décision : il ne passe aucun ordre et ne constitue pas un conseil en
 investissement. Les performances passées ne préjugent pas des performances futures.
@@ -73,5 +83,8 @@ tests only once and says what it does not know**. Pure Python, MIT licence.
 - Workshop: realistic costs and taxes, leverage, shorts, CFDs, margin calls, fund fees, triggers, run state & resume.
 - Algorithmic mode, parameter grid on all cores, research mode, blind practice, strategies in code, CLI and VS Code
   extension.
+
+- Anchored registries: `registre/ancrages.jsonl` publishes, for each registry of the online lab, its line count and
+  SHA-256, chained entry to entry; `portfolio-assistant verifier` checks registries shown later against it.
 
 `pip install -e ".[tests]"`, then `portfolio-assistant --help`.

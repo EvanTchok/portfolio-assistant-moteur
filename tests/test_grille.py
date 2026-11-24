@@ -54,3 +54,13 @@ def test_a_grid_counts_every_combination_in_the_workshop(tmp_path):
     again = services.grid_run(ws, "pea", {"signal": "rsi", "fast": 14, "frais": "Courtier en ligne"},
                               {"fast": [7, 14, 21], "low": [25.0, 30.0]})
     assert again["n_configurations"] == 6                              # only the new ones are added
+
+
+def test_online_grids_are_smaller_and_use_one_core(monkeypatch):
+    monkeypatch.setenv("PA_EN_LIGNE", "1")
+    base = algo.AlgoSpec(signal="rsi", fast=14)
+    with pytest.raises(ValueError, match="en ligne"):
+        grille.combinations(base, {"fast": list(range(2, 40)), "low": [float(x) for x in range(10, 30)]})
+    out = grille.run_grid(_walk(n=500), base, {"fast": [7, 14]})
+    assert out["workers"] == 1
+    assert grille.estimate_seconds(_walk(n=500), base, 10) > 0

@@ -1,0 +1,34 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[tests]"
+      - name: Tests
+        run: pytest -q
+      - name: Chaîne d'ancrages bien formée
+        run: |
+          python - <<'PY'
+          from portfolio_assistant import ancrage
+          entries = ancrage.read_chain("registre/ancrages.jsonl")
+          assert entries, "chaîne vide"
+          for i in range(1, len(entries)):
+              assert entries[i]["précédent"] == ancrage._link(entries[i - 1]), f"chaînage rompu à l'ancrage {entries[i]['n']}"
+          print(f"{len(entries)} ancrage(s), dernier le {entries[-1]['date']}")
+          PY
