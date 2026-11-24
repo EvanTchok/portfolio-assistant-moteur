@@ -3,22 +3,26 @@
   {
    "séances": 5000,
    "lignes": 10,
-   "Portfolio Assistant (moteur du laboratoire)": 0.29541845599987937,
-   "Portfolio Assistant (atelier)": 0.35073849199989127,
-   "vectorbt": 0.05303946999993059,
-   "vectorbt, 1re exécution (compilation)": 14.579896276,
+   "Portfolio Assistant (moteur du laboratoire)": 0.05970606200000361,
+   "Portfolio Assistant (boucle de référence)": 0.11018837699998585,
+   "Portfolio Assistant (atelier)": 0.309551526000007,
+   "vectorbt": 0.029716782999997804,
+   "vectorbt, 1re exécution (compilation)": 13.542355592999996,
    "écart de valeur finale": 0.00010662572829533978,
-   "écart atelier / laboratoire": 6.661338147750939e-16
+   "écart atelier / laboratoire": 6.661338147750939e-16,
+   "écart chemin rapide / boucle de référence": 0.0
   },
   {
    "séances": 5000,
    "lignes": 50,
-   "Portfolio Assistant (moteur du laboratoire)": 0.4745632900003329,
-   "Portfolio Assistant (atelier)": 0.510396555999705,
-   "vectorbt": 0.1370113009998022,
-   "vectorbt, 1re exécution (compilation)": 0.12247042499984673,
+   "Portfolio Assistant (moteur du laboratoire)": 0.10517096899999956,
+   "Portfolio Assistant (boucle de référence)": 0.1832861649999984,
+   "Portfolio Assistant (atelier)": 0.5081094349999944,
+   "vectorbt": 0.07955173599998488,
+   "vectorbt, 1re exécution (compilation)": 0.08695261299999402,
    "écart de valeur finale": 8.528116349304504e-05,
-   "écart atelier / laboratoire": 0.0
+   "écart atelier / laboratoire": 0.0,
+   "écart chemin rapide / boucle de référence": 0.0
   }
  ],
  "environnement": {

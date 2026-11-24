@@ -19,6 +19,10 @@ def panel(n_bars, n_assets, seed=0):
 def ours(p):
     return run_backtest(p, equal_weight(), BacktestConfig(rebalance="monthly", lookback=0, fee_rate=0.001)).nav
 
+def ours_ref(p):
+    return run_backtest(p, equal_weight(), BacktestConfig(rebalance="monthly", lookback=0, fee_rate=0.001),
+                        reference=True).nav
+
 def ours_adv(p):
     return run_advanced(p, equal_weight(), AdvancedConfig(rebalance="monthly", lookback=0)).nav
 
@@ -44,9 +48,11 @@ for n_bars, n_assets in [(5000, 10), (5000, 50)]:
     gap = float(abs(a.iloc[-1] / c.iloc[-1] - 1))
     rows.append({"séances": n_bars, "lignes": n_assets,
                  "Portfolio Assistant (moteur du laboratoire)": timeit(ours, p),
+                 "Portfolio Assistant (boucle de référence)": timeit(ours_ref, p),
                  "Portfolio Assistant (atelier)": timeit(ours_adv, p),
                  "vectorbt": timeit(vbt_run, p), "vectorbt, 1re exécution (compilation)": first,
-                 "écart de valeur finale": gap, "écart atelier / laboratoire": float(abs(a.iloc[-1] / b.iloc[-1] - 1))})
+                 "écart de valeur finale": gap, "écart atelier / laboratoire": float(abs(a.iloc[-1] / b.iloc[-1] - 1)),
+                 "écart chemin rapide / boucle de référence": float(abs(a.iloc[-1] / ours_ref(p).iloc[-1] - 1))})
 info = {"python": platform.python_version(), "vectorbt": vbt.__version__, "pandas": pd.__version__,
         "machine": platform.machine(), "processeur": platform.processor() or "inconnu"}
 print(json.dumps({"lignes": rows, "environnement": info}, indent=1, ensure_ascii=False))
