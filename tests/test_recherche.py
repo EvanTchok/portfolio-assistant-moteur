@@ -22,7 +22,7 @@ def test_a_signal_followed_by_rises_shows_an_edge_and_a_random_one_does_not():
     assert rnd["n"] > 20 and set(rnd["table"]["horizon"]) == {"5 j", "21 j"}
     # plant a rise after every entry signal: the study must see it
     sig = algo.signals(p, spec)["entry_long"]
-    r = p.pct_change().fillna(0.0).to_numpy()
+    r = p.pct_change().fillna(0.0).to_numpy(copy=True)          # pandas 3: read-only otherwise
     for t, j in zip(*np.nonzero(sig.to_numpy())):
         r[t + 2: t + 7, j] += 0.004
     q = pd.DataFrame(100 * np.cumprod(1 + r, axis=0), index=p.index, columns=p.columns)
