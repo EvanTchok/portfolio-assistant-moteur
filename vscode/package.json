@@ -1,0 +1,46 @@
+{
+  "name": "portfolio-assistant",
+  "displayName": "Portfolio Assistant",
+  "description": "Écrire, essayer, explorer, geler et valider ses stratégies Portfolio Assistant depuis VS Code.",
+  "version": "0.1.0",
+  "publisher": "evan-peronnier",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Snippets"],
+  "keywords": ["backtest", "finance", "portefeuille", "trading", "stratégie"],
+  "repository": { "type": "git", "url": "https://github.com/EvanTchok/portfolio-assistant-moteur" },
+  "activationEvents": ["onLanguage:python", "workspaceContains:laboratoire"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "portfolioAssistant.nouvelle", "title": "Nouvelle stratégie", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.essayer", "title": "Essayer dans l'atelier", "category": "Portfolio Assistant", "icon": "$(play)" },
+      { "command": "portfolioAssistant.etat", "title": "Essayer jusqu'à une date et sauvegarder l'état", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.reprendre", "title": "Reprendre un calcul sauvegardé", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.explorer", "title": "Passer au laboratoire (compte comme un essai)", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.geler", "title": "Geler la stratégie", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.valider", "title": "Lancer les 12 tests de validation", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.essais", "title": "Essais comptés par univers", "category": "Portfolio Assistant" },
+      { "command": "portfolioAssistant.ouvrir", "title": "Ouvrir le logiciel", "category": "Portfolio Assistant" }
+    ],
+    "menus": {
+      "editor/title": [ { "command": "portfolioAssistant.essayer", "when": "resourceLangId == python", "group": "navigation" } ],
+      "editor/context": [
+        { "command": "portfolioAssistant.essayer", "when": "resourceLangId == python", "group": "portfolio@1" },
+        { "command": "portfolioAssistant.explorer", "when": "resourceLangId == python", "group": "portfolio@2" }
+      ]
+    },
+    "keybindings": [ { "command": "portfolioAssistant.essayer", "key": "ctrl+alt+e", "mac": "cmd+alt+e", "when": "editorLangId == python" } ],
+    "configuration": {
+      "title": "Portfolio Assistant",
+      "properties": {
+        "portfolioAssistant.python": { "type": "string", "default": "", "description": "Interpréteur Python du logiciel. Vide : celui choisi dans l'extension Python, sinon python3." },
+        "portfolioAssistant.projet": { "type": "string", "default": "", "description": "Dossier du logiciel. Vide : le dossier ouvert dans VS Code." },
+        "portfolioAssistant.univers": { "type": "string", "default": "pea", "enum": ["pea", "monde", "ucits"], "description": "Univers utilisé par défaut." },
+        "portfolioAssistant.frais": { "type": "string", "default": "Courtier en ligne", "enum": ["Frais du laboratoire (0,10 % par transaction)", "Aucun frais (pour comparer)", "Courtier en ligne", "Banque de réseau", "Institutionnel"], "description": "Barème de frais de l'atelier." },
+        "portfolioAssistant.adresse": { "type": "string", "default": "http://localhost:8501", "description": "Adresse du logiciel ouvert dans le navigateur." }
+      }
+    },
+    "snippets": [ { "language": "python", "path": "./snippets/strategies.json" } ]
+  }
+}

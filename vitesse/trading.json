@@ -1,0 +1,24 @@
+{
+ "barres": 50000,
+ "Portfolio Assistant (mode algorithmique)": {
+  "secondes": 0.49420947399994475,
+  "valeur finale": 47233.62097876655,
+  "positions": 341
+ },
+ "vectorbt": {
+  "secondes": 0.010613442000021678,
+  "première fois": 4.327749380000114,
+  "valeur finale": 47233.620978766485,
+  "positions": 341
+ },
+ "NautilusTrader": {
+  "secondes": 2.283973739999965,
+  "valeur finale": 47584.88,
+  "positions": 341
+ },
+ "environnement": {
+  "python": "3.13.18",
+  "vectorbt": "1.2.1",
+  "nautilus_trader": "1.231.0"
+ }
+}

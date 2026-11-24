@@ -1,0 +1,31 @@
+{
+ "lignes": [
+  {
+   "séances": 5000,
+   "lignes": 10,
+   "Portfolio Assistant (moteur du laboratoire)": 0.29541845599987937,
+   "Portfolio Assistant (atelier)": 0.35073849199989127,
+   "vectorbt": 0.05303946999993059,
+   "vectorbt, 1re exécution (compilation)": 14.579896276,
+   "écart de valeur finale": 0.00010662572829533978,
+   "écart atelier / laboratoire": 6.661338147750939e-16
+  },
+  {
+   "séances": 5000,
+   "lignes": 50,
+   "Portfolio Assistant (moteur du laboratoire)": 0.4745632900003329,
+   "Portfolio Assistant (atelier)": 0.510396555999705,
+   "vectorbt": 0.1370113009998022,
+   "vectorbt, 1re exécution (compilation)": 0.12247042499984673,
+   "écart de valeur finale": 8.528116349304504e-05,
+   "écart atelier / laboratoire": 0.0
+  }
+ ],
+ "environnement": {
+  "python": "3.13.18",
+  "vectorbt": "1.2.1",
+  "pandas": "3.0.5",
+  "machine": "x86_64",
+  "processeur": "x86_64"
+ }
+}

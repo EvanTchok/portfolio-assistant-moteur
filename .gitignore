@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+*.egg-info/
+.DS_Store
+donnees_cabinet/
+laboratoire/
+tests/test_robustness_report.py
