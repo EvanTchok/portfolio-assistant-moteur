@@ -1,0 +1,36 @@
+name: publier sur PyPI
+
+# Se déclenche quand une version est publiée sur GitHub (onglet Releases). Aucun jeton à
+# conserver : PyPI fait confiance à ce dépôt (« Trusted Publishing »), à configurer une fois
+# sur pypi.org par le propriétaire du compte. Voir PUBLIER.md.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install build twine && python -m build && twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paquets
+          path: dist/
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: paquets
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

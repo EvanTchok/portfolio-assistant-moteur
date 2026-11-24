@@ -88,3 +88,5 @@ tests only once and says what it does not know**. Pure Python, MIT licence.
   SHA-256, chained entry to entry; `portfolio-assistant verifier` checks registries shown later against it.
 
 `pip install -e ".[tests]"`, then `portfolio-assistant --help`.
+
+Publishing to PyPI and the VS Code Marketplace: see `PUBLIER.md` (in French).
